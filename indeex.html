@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác Minh Bảo Mật</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #161b26;
+            border: 1px solid #232d3f;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #8a99ad;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .task-btn {
+            background-color: #1f2635;
+            color: #e2e8f0;
+            border: 1px solid #2d3748;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .task-btn:hover {
+            background-color: #2d3748;
+        }
+
+        /* Khi nhiệm vụ đã hoàn thành */
+        .task-btn.completed {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .status-icon {
+            font-size: 16px;
+        }
+
+        .task-btn.completed .status-icon::after {
+            content: " ✓";
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        /* Nút xác nhận cuối cùng */
+        .submit-btn {
+            width: 100%;
+            background-color: #2d3748;
+            color: #718096;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: not-allowed;
+            transition: all 0.3s ease;
+        }
+
+        /* Khi kích hoạt nút chuyển hướng thành màu xanh lá */
+        .submit-btn.active {
+            background-color: #10b981;
+            color: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Xác minh bảo mật</h2>
+        <div class="subtitle" id="progress-text">Hoàn thành nhiệm vụ (0/3) để tiếp tục</div>
+
+        <div class="task-list">
+            <!-- Nhiệm vụ 1: Telegram -->
+            <a href="https://t.me/sharemenuhackffk12" target="_blank" class="task-btn" id="task1" onclick="completeTask('task1')">
+                <span>1. Vào Nhóm Chat Telegram</span>
+                <span class="status-icon"></span>
+            </a>
+
+            <!-- Nhiệm vụ 2: TikTok -->
+            <a href="tiktok.com/@kieet.tuaan" target="_blank" class="task-btn" id="task2" onclick="completeTask('task2')">
+                <span>2. Follow Kênh TikTok</span>
+                <span class="status-icon"></span>
+            </a>
+
+            <!-- Nhiệm vụ 3: YouTube -->
+            <a href="https://www.youtube.com/@maituankiet2k12" target="_blank" class="task-btn" id="task3" onclick="completeTask('task3')">
+                <span>3. Đăng ký Kênh YouTube</span>
+                <span class="status-icon"></span>
+            </a>
+        </div>
+
+        <!-- Nút xác nhận đổi màu khi làm xong 3/3 -->
+        <button class="submit-btn" id="submit-btn" onclick="redirectToGame()" disabled>Xác Nhận Nhiệm Vụ</button>
+    </div>
+
+    <script>
+        // Lưu trạng thái các nhiệm vụ đã làm
+        let completedTasks = {
+            task1: false,
+            task2: false,
+            task3: false
+        };
+
+        const totalTasks = 3;
+        // Đường dẫn đến trang web tải game bằng Google Sites của bạn
+        const destinationUrl = "https://sites.google.com/view/hackcheataim/home";
+
+        function completeTask(taskId) {
+            // Đánh dấu nhiệm vụ này đã được click
+            if (!completedTasks[taskId]) {
+                completedTasks[taskId] = true;
+                
+                // Thêm dấu tích xanh và viền xanh cho nút nhiệm vụ vừa nhấn
+                document.getElementById(taskId).classList.add('completed');
+                
+                // Cập nhật tiến độ hiển thị nhiệm vụ
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            // Đếm số lượng nhiệm vụ đã hoàn thành
+            let count = Object.values(completedTasks).filter(status => status === true).length;
+            
+            // Cập nhật lại phần chữ thông báo (0/3 -> 1/3 -> 2/3...)
+            document.getElementById('progress-text').innerText = `Hoàn thành nhiệm vụ (${count}/${totalTasks}) để tiếp tục`;
+            
+            // Nếu hoàn thành đủ cả 3 nhiệm vụ
+            if (count === totalTasks) {
+                let submitBtn = document.getElementById('submit-btn');
+                submitBtn.removeAttribute('disabled'); // Mở khóa nút ấn
+                submitBtn.classList.add('active'); // Đổi nút sang màu xanh lá
+            }
+        }
+
+        function redirectToGame() {
+            let count = Object.values(completedTasks).filter(status => status === true).length;
+            if (count === totalTasks) {
+                // Chuyển hướng người dùng tới trang tải game
+                window.location.href = destinationUrl;
+            }
+        }
+    </script>
+
+</body>
+  </html>
